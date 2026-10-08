@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Red vs Blue Team Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>⚔️ Red vs Blue Team Simulator</h1>
+  <p class="sub">Synthetic attack logs are generated (nothing real is executed). Detection rules are then tested against them.</p>
+
+  <div class="grid">
+    <aside>
+      <div class="card">
+        <h2>🔴 Red Team: scenarios</h2>
+        <div id="scList"></div>
+        <h2 style="margin-top:14px">Settings</h2>
+        <div class="mut">Benign noise events: <b id="noiseVal">60</b></div>
+        <input type="range" id="noise" min="0" max="400" value="60">
+        <div style="margin-top:10px">Seed: <input type="number" id="seed" value="42">
+          <button class="alt" id="dice" title="Random seed">🎲</button></div>
+        <button class="red" id="runBtn">▶️ Run simulation</button>
+      </div>
+    </aside>
+
+    <main>
+      <div id="err"></div>
+      <div class="card"><h2>🔵 Blue Team: results</h2><div class="stats" id="stats"></div></div>
+      <div class="card wrap"><h2>Scenario results</h2><table id="resTable"></table></div>
+      <div class="card"><h2>MITRE ATT&amp;CK coverage</h2><div class="matrix" id="matrix"></div></div>
+
+      <div class="card">
+        <h2>Detection rules (Sigma-style JSON)</h2>
+        <p class="mut">Fields: event_id, category, host, user, src_ip, dst_ip, image, parent_image, command_line, target_image, logon_type, bytes_out.<br>
+        Operators: contains, startswith, endswith, in, not_in, ne, gt, lt (string or list). Optional <code>threshold</code>: count, window_s, group_by, distinct.<br>
+        Tip: a rule that fires on harmless events is a false positive. Tune it with exclusions, e.g. <code>"user": {"not_in": ["svc_backup"]}</code>. Write new rules for missed attacks.</p>
+        <textarea id="rules" spellcheck="false"></textarea>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button id="applyBtn">Apply rules &amp; re-test</button>
+          <button class="alt" id="resetBtn">Reset rules</button>
+          <button class="alt" id="dl">⬇️ Download report</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Event log</h2>
+        <label class="row"><input type="checkbox" id="onlyInt" checked> Show only malicious / alerted events</label>
+        <div class="log wrap"><table id="logTable"></table></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
